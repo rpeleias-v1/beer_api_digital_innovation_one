@@ -4,6 +4,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import one.digitalinnovation.beerstock.dto.BeerDTO;
+import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
 
 @Api("Manages beer stock")
 public interface BeerControllerDocs {
@@ -12,5 +14,5 @@ public interface BeerControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Returns a simple hello world")
     })
-    String helloAPI();
+    BeerDTO createBeer(BeerDTO beerDTO) throws BeerAlreadyRegisteredException;
 }
