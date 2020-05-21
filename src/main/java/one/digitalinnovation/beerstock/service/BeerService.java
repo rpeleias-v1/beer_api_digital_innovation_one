@@ -10,7 +10,9 @@ import one.digitalinnovation.beerstock.repository.BeerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -37,5 +39,12 @@ public class BeerService {
         if (optSavedBeer.isPresent()) {
             throw new BeerAlreadyRegisteredException(beerDTO.getName());
         }
+    }
+
+    public List<BeerDTO> listAll() {
+        return beerRepository.findAll()
+                .stream()
+                .map(beerMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

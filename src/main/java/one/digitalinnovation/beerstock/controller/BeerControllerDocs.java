@@ -9,6 +9,8 @@ import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
 import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
+
 @Api("Manages beer stock")
 public interface BeerControllerDocs {
 
@@ -25,4 +27,10 @@ public interface BeerControllerDocs {
             @ApiResponse(code = 404, message = "Beer with a given name not found.")
     })
     BeerDTO findByName(@PathVariable String name) throws BeerNotFoundException;
+
+    @ApiOperation(value = "Returns a list of all beers registered in the system")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of all beers registered in the system"),
+    })
+    List<BeerDTO> listBeers();
 }
