@@ -51,5 +51,5 @@ public interface BeerControllerDocs {
             @ApiResponse(code = 400, message = "Beer not successfully increment in stock"),
             @ApiResponse(code = 404, message = "Beer with given id not found.")
     })
-    BeerDTO increment(@PathVariable Long id, @RequestBody @Valid QuantityDTO quantityDTO) throws BeerNotFoundException, BeerStockExceededException
+    BeerDTO increment(@PathVariable Long id, @RequestBody @Valid QuantityDTO quantityDTO) throws BeerNotFoundException, BeerStockExceededException;
 }
