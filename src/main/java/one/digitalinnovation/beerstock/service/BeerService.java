@@ -64,7 +64,8 @@ public class BeerService {
         int beerStockAfterIncrement = quantityToIncrement + beerToIncrementStock.getQuantity();
         if (beerStockAfterIncrement <= beerToIncrementStock.getMax()) {
             beerToIncrementStock.setQuantity(beerStockAfterIncrement);
-            return beerMapper.toDTO(beerToIncrementStock);
+            Beer incrementedBeerStock = beerRepository.save(beerToIncrementStock);
+            return beerMapper.toDTO(incrementedBeerStock);
         }
         throw new BeerStockExceededException(id, quantityToIncrement);
     }
