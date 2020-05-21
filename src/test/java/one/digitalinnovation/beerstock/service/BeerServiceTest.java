@@ -13,10 +13,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -68,11 +72,33 @@ public class BeerServiceTest {
     }
 
     @Test
-    void whenNotRegisteredBeerNameIsGivenThenThrowAnException() throws BeerNotFoundException {
+    void whenNotRegisteredBeerNameIsGivenThenThrowAnException() {
         BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
 
         when(beerRepository.findByName(expectedBeerDTO.getName())).thenReturn(Optional.empty());
 
         assertThrows(BeerNotFoundException.class,() -> beerService.findByName(expectedBeerDTO.getName()));
+    }
+
+    @Test
+    void whenListBeerIsCalledThenReturnAListOfBeers() {
+        BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        Beer expectedFoundBeer = beerMapper.toModel(expectedBeerDTO);
+
+        when(beerRepository.findAll()).thenReturn(Collections.singletonList(expectedFoundBeer));
+
+        List<BeerDTO> foundBeerDTO = beerService.listAll();
+
+        assertFalse(foundBeerDTO.isEmpty());
+        assertEquals(expectedBeerDTO, foundBeerDTO.get(0));
+    }
+
+    @Test
+    void whenListBeerIsCalledThenReturnAnEmptyList() {
+        when(beerRepository.findAll()).thenReturn(Collections.EMPTY_LIST);
+
+        List<BeerDTO> foundBeerDTO = beerService.listAll();
+
+        assertTrue(foundBeerDTO.isEmpty());
     }
 }
