@@ -21,10 +21,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class BeerServiceTest {
+
+    private static final long INVALID_BEER_ID = 1L;
 
     @Mock
     private BeerRepository beerRepository;
@@ -100,5 +105,26 @@ public class BeerServiceTest {
         List<BeerDTO> foundBeerDTO = beerService.listAll();
 
         assertTrue(foundBeerDTO.isEmpty());
+    }
+
+    @Test
+    void whenExclusionIsCalledWithValidIdThenABeerShouldBeDeleted() throws BeerNotFoundException {
+        BeerDTO expectedExcludedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        Beer expectedExcludedBeer = beerMapper.toModel(expectedExcludedBeerDTO);
+
+        when(beerRepository.findById(expectedExcludedBeerDTO.getId())).thenReturn(Optional.of(expectedExcludedBeer));
+        doNothing().when(beerRepository).deleteById(expectedExcludedBeer.getId());
+
+        beerService.deleteById(expectedExcludedBeerDTO.getId());
+
+        verify(beerRepository, times(1)).findById(expectedExcludedBeerDTO.getId());
+        verify(beerRepository, times(1)).deleteById(expectedExcludedBeerDTO.getId());
+    }
+
+    @Test
+    void whenExclusionIsCalledWithInvalidIdThenExceptionShouldBeThrown() {
+        when(beerRepository.findById(INVALID_BEER_ID)).thenReturn(Optional.empty());
+
+        assertThrows(BeerNotFoundException.class,() -> beerService.deleteById(INVALID_BEER_ID));
     }
 }

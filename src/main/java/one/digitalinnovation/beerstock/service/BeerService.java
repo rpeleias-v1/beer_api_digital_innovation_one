@@ -22,7 +22,7 @@ public class BeerService {
     private final BeerMapper beerMapper = BeerMapper.INSTANCE;
 
     public BeerDTO createBeer(BeerDTO beerDTO) throws BeerAlreadyRegisteredException {
-        verifyIfIsAlreadyRegistered(beerDTO);
+        verifyIfIsAlreadyRegistered(beerDTO.getName());
         Beer beer = beerMapper.toModel(beerDTO);
         Beer savedBeer = beerRepository.save(beer);
         return beerMapper.toDTO(savedBeer);
@@ -34,17 +34,29 @@ public class BeerService {
         return beerMapper.toDTO(foundBeer);
     }
 
-    private void verifyIfIsAlreadyRegistered(BeerDTO beerDTO) throws BeerAlreadyRegisteredException {
-        Optional<Beer> optSavedBeer = beerRepository.findByName(beerDTO.getName());
-        if (optSavedBeer.isPresent()) {
-            throw new BeerAlreadyRegisteredException(beerDTO.getName());
-        }
-    }
+
 
     public List<BeerDTO> listAll() {
         return beerRepository.findAll()
                 .stream()
                 .map(beerMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public void deleteById(Long id) throws BeerNotFoundException {
+        verifyIfExists(id);
+        beerRepository.deleteById(id);
+    }
+
+    private void verifyIfIsAlreadyRegistered(String name) throws BeerAlreadyRegisteredException {
+        Optional<Beer> optSavedBeer = beerRepository.findByName(name);
+        if (optSavedBeer.isPresent()) {
+            throw new BeerAlreadyRegisteredException(name);
+        }
+    }
+
+    private void verifyIfExists(Long id) throws BeerNotFoundException {
+        beerRepository.findById(id)
+                .orElseThrow(() -> new BeerNotFoundException(id));
     }
 }
