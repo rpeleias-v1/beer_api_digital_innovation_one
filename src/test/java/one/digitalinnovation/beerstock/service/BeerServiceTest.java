@@ -19,13 +19,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -35,12 +34,9 @@ import static org.mockito.Mockito.when;
 public class BeerServiceTest {
 
     private static final long INVALID_BEER_ID = 1L;
-
+    private final BeerMapper beerMapper = BeerMapper.INSTANCE;
     @Mock
     private BeerRepository beerRepository;
-
-    private BeerMapper beerMapper = BeerMapper.INSTANCE;
-
     @InjectMocks
     private BeerService beerService;
 
@@ -54,9 +50,9 @@ public class BeerServiceTest {
 
         BeerDTO createdBeerDTO = beerService.createBeer(beerDTO);
 
-        assertEquals(beerDTO.getId(), createdBeerDTO.getId());
-        assertEquals(beerDTO.getName(), createdBeerDTO.getName());
-        assertEquals(beerDTO.getType(), createdBeerDTO.getType());
+        assertThat(createdBeerDTO.getId(), is(equalTo(beerDTO.getId())));
+        assertThat(createdBeerDTO.getName(), is(equalTo(beerDTO.getName())));
+        assertThat(createdBeerDTO.getId(), is(equalTo(beerDTO.getId())));
     }
 
     @Test
@@ -78,7 +74,7 @@ public class BeerServiceTest {
 
         BeerDTO foundBeerDTO = beerService.findByName(expectedBeerDTO.getName());
 
-        assertEquals(expectedBeerDTO, foundBeerDTO);
+        assertThat(foundBeerDTO, is(equalTo(expectedBeerDTO)));
     }
 
     @Test
@@ -99,8 +95,8 @@ public class BeerServiceTest {
 
         List<BeerDTO> foundBeerDTO = beerService.listAll();
 
-        assertFalse(foundBeerDTO.isEmpty());
-        assertEquals(expectedBeerDTO, foundBeerDTO.get(0));
+        assertThat(foundBeerDTO, is(not(empty())));
+        assertThat(foundBeerDTO.get(0), is(equalTo(expectedBeerDTO)));
     }
 
     @Test
@@ -109,7 +105,7 @@ public class BeerServiceTest {
 
         List<BeerDTO> foundBeerDTO = beerService.listAll();
 
-        assertTrue(foundBeerDTO.isEmpty());
+        assertThat(foundBeerDTO, is(empty()));
     }
 
     @Test
@@ -145,8 +141,8 @@ public class BeerServiceTest {
         int expectedQuantityAfterIncrement = expectedBeerDTO.getQuantity() + quantityToIncrement;
         BeerDTO incrementedBeerDTO = beerService.increment(expectedBeerDTO.getId(), quantityToIncrement);
 
-        assertThat(expectedQuantityAfterIncrement, equalTo(incrementedBeerDTO.getQuantity()));
-        assertThat(expectedQuantityAfterIncrement, lessThan(expectedBeerDTO.getMax()));
+        assertThat(incrementedBeerDTO.getQuantity(), is(equalTo(expectedQuantityAfterIncrement)));
+        assertThat(expectedBeerDTO.getMax(), is(greaterThan(expectedQuantityAfterIncrement)));
     }
 
     @Test
@@ -181,8 +177,8 @@ public class BeerServiceTest {
         int expectedQuantityAfterDecrement = expectedBeerDTO.getQuantity() - quantityToDecrement;
         BeerDTO incrementedBeerDTO = beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement);
 
-        assertThat(expectedQuantityAfterDecrement, equalTo(incrementedBeerDTO.getQuantity()));
-        assertThat(expectedQuantityAfterDecrement, greaterThan(0));
+        assertThat(incrementedBeerDTO.getQuantity(), is(equalTo(expectedQuantityAfterDecrement)));
+        assertThat(expectedQuantityAfterDecrement, is(greaterThan(0)));
     }
 
     @Test
@@ -197,8 +193,8 @@ public class BeerServiceTest {
         int expectedQuantityAfterDecrement = expectedBeerDTO.getQuantity() - quantityToDecrement;
         BeerDTO incrementedBeerDTO = beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement);
 
-        assertThat(expectedQuantityAfterDecrement, equalTo(0));
-        assertThat(expectedQuantityAfterDecrement, equalTo(incrementedBeerDTO.getQuantity()));
+        assertThat(expectedQuantityAfterDecrement, is(equalTo(0)));
+        assertThat(expectedQuantityAfterDecrement, is(equalTo(incrementedBeerDTO.getQuantity())));
     }
 
     @Test
