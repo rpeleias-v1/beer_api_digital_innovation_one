@@ -1,6 +1,6 @@
-<h2>Digital Innovation: Expert class - Desenvolvimento de testes unitários para cobertura de uma API em Spring Boot para o gerenciamento de estoques de cerveja</h2>
+<h2>Digital Innovation: Expert class - Desenvolvimento de testes unitários para validar uma API REST de gerenciamento de estoques de cerveja.</h2>
 
-Nesta live coding, vamos apresentar como desenvolver testes unitários para uma API REST responsável por fazer o gerenciamento de um estoque de cervejas, criada com o Spring Boot.
+Nesta live coding, vamos aprender a testar, unitariamente, uma API REST para o gerenciamento de estoques de cerveja. Vamos desenvolver testes unitários para validar o nosso sistema de gerenciamento de estoques de cerveja, e também apresentar os principais conceitos e vantagens de criar testes unitários com JUnit e Mockito. Além disso, vamos também mostrar como desenvolver funcionalidades da nossa API através da prática do TDD.
 
 Durante a sessão, serão abordados os seguintes tópicos:
 
@@ -50,7 +50,7 @@ Abaixo, seguem links bem bacanas, sobre tópicos mencionados durante a aula:
 * [Referência para o padrão arquitetural REST](https://restfulapi.net/)
 * [Referência pirâmide de testes - Martin Fowler](https://martinfowler.com/articles/practical-test-pyramid.html#TheImportanceOftestAutomation)
 
-[Neste link](https://drive.google.com/file/d/1crVPOVl6ok2HeYjh3fjQuGQn2lDZVHrn/view?usp=sharing), seguem os slides apresentados como o roteiro utilizado para o desenvolvimento do projeto da nossa sessão.
+[Neste link](https://drive.google.com/file/d/1KPh19mvyKirorOI-UsEYHKkmZpet3Ks6/view?usp=sharing), seguem os slides apresentados como o roteiro utilizado para o desenvolvimento do projeto da nossa sessão.
 
 
 
