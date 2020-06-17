@@ -38,4 +38,6 @@ public class Beer {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BeerType type;
+
+
 }
