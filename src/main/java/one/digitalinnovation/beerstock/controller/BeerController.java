@@ -2,13 +2,16 @@ package one.digitalinnovation.beerstock.controller;
 
 import lombok.AllArgsConstructor;
 import one.digitalinnovation.beerstock.dto.BeerDTO;
+import one.digitalinnovation.beerstock.dto.QuantityDTO;
 import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
 import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
+import one.digitalinnovation.beerstock.exception.BeerStockExceededException;
 import one.digitalinnovation.beerstock.service.BeerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,5 +49,10 @@ public class BeerController implements BeerControllerDocs {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Long id) throws BeerNotFoundException {
         beerService.deleteById(id);
+    }
+
+    @PatchMapping("/{id}/increment")
+    public BeerDTO increment(@PathVariable Long id, @RequestBody @Valid QuantityDTO quantityDTO) throws BeerNotFoundException, BeerStockExceededException {
+        return beerService.increment(id, quantityDTO.getQuantity());
     }
 }
