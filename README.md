@@ -1,6 +1,7 @@
 <h2>Digital Innovation: Expert class - Desenvolvimento de testes unitários para validar uma API REST de gerenciamento de estoques de cerveja.</h2>
-
-![Logo of the project](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQde0Qe2DGg-_iOYzrKorZ5d2XPKNoPE7O8YYVVsg1qbwE4ETXRstdYr9CkXrP08yXUuSo&usqp=CAU)
+<div align="center">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQde0Qe2DGg-_iOYzrKorZ5d2XPKNoPE7O8YYVVsg1qbwE4ETXRstdYr9CkXrP08yXUuSo&usqp=CAU" />
+</div>
 
 > Nesta live coding, vamos aprender a testar, unitariamente, uma API REST para o gerenciamento de estoques de cerveja. Vamos desenvolver testes unitários para validar o nosso sistema de gerenciamento de estoques de cerveja, e também apresentar os principais conceitos e vantagens de criar testes unitários com JUnit e Mockito. Além disso, vamos também mostrar como desenvolver funcionalidades da nossa API através da prática do TDD.
 
