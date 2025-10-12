@@ -1,6 +1,6 @@
-package one.digitalinnovation.beerstock.repository;
+package com.dio.beerstock.repository;
 
-import one.digitalinnovation.beerstock.entity.Beer;
+import com.dio.beerstock.entity.Beer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
