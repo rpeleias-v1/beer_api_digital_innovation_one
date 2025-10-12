@@ -1,13 +1,13 @@
-package one.digitalinnovation.beerstock.service;
+package com.dio.beerstock.service;
 
+import com.dio.beerstock.dto.BeerDTO;
+import com.dio.beerstock.entity.Beer;
+import com.dio.beerstock.exception.BeerAlreadyRegisteredException;
+import com.dio.beerstock.exception.BeerNotFoundException;
+import com.dio.beerstock.exception.BeerStockExceededException;
+import com.dio.beerstock.mapper.BeerMapper;
+import com.dio.beerstock.repository.BeerRepository;
 import lombok.AllArgsConstructor;
-import one.digitalinnovation.beerstock.dto.BeerDTO;
-import one.digitalinnovation.beerstock.entity.Beer;
-import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
-import one.digitalinnovation.beerstock.exception.BeerNotFoundException;
-import one.digitalinnovation.beerstock.exception.BeerStockExceededException;
-import one.digitalinnovation.beerstock.mapper.BeerMapper;
-import one.digitalinnovation.beerstock.repository.BeerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +22,7 @@ public class BeerService {
     private final BeerRepository beerRepository;
     private final BeerMapper beerMapper = BeerMapper.INSTANCE;
 
+    // 1. Criação
     public BeerDTO createBeer(BeerDTO beerDTO) throws BeerAlreadyRegisteredException {
         verifyIfIsAlreadyRegistered(beerDTO.getName());
         Beer beer = beerMapper.toModel(beerDTO);
@@ -29,12 +30,20 @@ public class BeerService {
         return beerMapper.toDTO(savedBeer);
     }
 
+    // 2. Busca por Nome
     public BeerDTO findByName(String name) throws BeerNotFoundException {
         Beer foundBeer = beerRepository.findByName(name)
                 .orElseThrow(() -> new BeerNotFoundException(name));
         return beerMapper.toDTO(foundBeer);
     }
 
+    // 3. Busca por ID (Adicionado para testes futuros de exclusão)
+    public BeerDTO findById(Long id) throws BeerNotFoundException {
+        Beer foundBeer = verifyIfExists(id);
+        return beerMapper.toDTO(foundBeer);
+    }
+
+    // 4. Lista todas
     public List<BeerDTO> listAll() {
         return beerRepository.findAll()
                 .stream()
@@ -42,11 +51,26 @@ public class BeerService {
                 .collect(Collectors.toList());
     }
 
+    // 5. Exclusão
     public void deleteById(Long id) throws BeerNotFoundException {
         verifyIfExists(id);
         beerRepository.deleteById(id);
     }
 
+    // 6. Incremento de Estoque
+    public BeerDTO increment(Long id, int quantityToIncrement) throws BeerNotFoundException, BeerStockExceededException {
+        Beer beerToIncrementStock = verifyIfExists(id);
+        int quantityAfterIncrement = quantityToIncrement + beerToIncrementStock.getQuantity();
+
+        if (quantityAfterIncrement <= beerToIncrementStock.getMax()) {
+            beerToIncrementStock.setQuantity(quantityAfterIncrement);
+            Beer incrementedBeer = beerRepository.save(beerToIncrementStock);
+            return beerMapper.toDTO(incrementedBeer);
+        }
+        throw new BeerStockExceededException(id, quantityToIncrement);
+    }
+    
+    // Métodos Auxiliares
     private void verifyIfIsAlreadyRegistered(String name) throws BeerAlreadyRegisteredException {
         Optional<Beer> optSavedBeer = beerRepository.findByName(name);
         if (optSavedBeer.isPresent()) {
@@ -57,16 +81,5 @@ public class BeerService {
     private Beer verifyIfExists(Long id) throws BeerNotFoundException {
         return beerRepository.findById(id)
                 .orElseThrow(() -> new BeerNotFoundException(id));
-    }
-
-    public BeerDTO increment(Long id, int quantityToIncrement) throws BeerNotFoundException, BeerStockExceededException {
-        Beer beerToIncrementStock = verifyIfExists(id);
-        int quantityAfterIncrement = quantityToIncrement + beerToIncrementStock.getQuantity();
-        if (quantityAfterIncrement <= beerToIncrementStock.getMax()) {
-            beerToIncrementStock.setQuantity(beerToIncrementStock.getQuantity() + quantityToIncrement);
-            Beer incrementedBeerStock = beerRepository.save(beerToIncrementStock);
-            return beerMapper.toDTO(incrementedBeerStock);
-        }
-        throw new BeerStockExceededException(id, quantityToIncrement);
     }
 }
