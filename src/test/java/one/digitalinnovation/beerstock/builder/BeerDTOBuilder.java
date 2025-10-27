@@ -1,13 +1,13 @@
 package one.digitalinnovation.beerstock.builder;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import one.digitalinnovation.beerstock.dto.BeerDTO;
 import one.digitalinnovation.beerstock.enums.BeerType;
 
+@Getter
+@Setter
 @Builder
 public class BeerDTOBuilder {
 
@@ -30,11 +30,13 @@ public class BeerDTOBuilder {
     private BeerType type = BeerType.LAGER;
 
     public BeerDTO toBeerDTO() {
-        return new BeerDTO(id,
-                name,
-                brand,
-                max,
-                quantity,
-                type);
+        return BeerDTO.builder()
+                .id(id)
+                .name(name)
+                .brand(brand)
+                .max(max)
+                .quantity(quantity)
+                .type(type)
+                .build();
     }
 }

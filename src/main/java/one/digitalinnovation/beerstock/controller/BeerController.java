@@ -1,5 +1,4 @@
 package one.digitalinnovation.beerstock.controller;
-
 import lombok.AllArgsConstructor;
 import one.digitalinnovation.beerstock.dto.BeerDTO;
 import one.digitalinnovation.beerstock.dto.QuantityDTO;

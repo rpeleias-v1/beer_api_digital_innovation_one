@@ -1,5 +1,6 @@
 package one.digitalinnovation.beerstock.entity;
 
+import jdk.jshell.Snippet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,4 +41,6 @@ public class Beer {
     private BeerType type;
 
 
+    public static Snippet builder() {
+    }
 }
