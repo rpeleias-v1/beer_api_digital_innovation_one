@@ -1,6 +1,5 @@
 package one.digitalinnovation.beerstock.service;
 
-import lombok.AllArgsConstructor;
 import one.digitalinnovation.beerstock.dto.BeerDTO;
 import one.digitalinnovation.beerstock.entity.Beer;
 import one.digitalinnovation.beerstock.exception.BeerAlreadyRegisteredException;
@@ -15,12 +14,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service
-@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class BeerService {
 
     private final BeerRepository beerRepository;
     private final BeerMapper beerMapper = BeerMapper.INSTANCE;
+
+    @Autowired // Injeção via construtor manual
+    public BeerService(BeerRepository beerRepository) {
+        this.beerRepository = beerRepository;
+    }
 
     public BeerDTO createBeer(BeerDTO beerDTO) throws BeerAlreadyRegisteredException {
         verifyIfIsAlreadyRegistered(beerDTO.getName());
@@ -69,4 +73,16 @@ public class BeerService {
         }
         throw new BeerStockExceededException(id, quantityToIncrement);
     }
+      public BeerDTO decrement(Long id, int quantityToDecrement) throws BeerNotFoundException, BeerStockExceededException {
+    Beer beerToDecrementStock = verifyIfExists(id);
+    int quantityAfterDecrement = beerToDecrementStock.getQuantity() - quantityToDecrement;
+    if (quantityAfterDecrement >= 0) {
+        beerToDecrementStock.setQuantity(beerToDecrementStock.getQuantity() - quantityToDecrement);
+        Beer decrementedBeerStock = beerRepository.save(beerToDecrementStock);
+        return beerMapper.toDTO(decrementedBeerStock);
+    }
+    throw new BeerStockExceededException(id, quantityToDecrement);
 }
+}
+
+  

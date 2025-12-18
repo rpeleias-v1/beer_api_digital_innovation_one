@@ -20,7 +20,7 @@ public class BeerDTOBuilder {
     @Builder.Default
     private String brand = "Ambev";
 
-    @Builder.Default
+    @Builder.Default 
     private int max = 50;
 
     @Builder.Default
